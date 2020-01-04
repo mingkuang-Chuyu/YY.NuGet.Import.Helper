@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <NuGetImportAfterCppPropsComplete>true</NuGetImportAfterCppPropsComplete>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(VisualStudioVersion)' != '' And '$(VisualStudioVersion)'  >= '16.0'">
+    <ForceImportBeforeCppProps>$(YY_Import_Helper_Backup_ForceImportBeforeCppProps)</ForceImportBeforeCppProps>
+    <YY_Import_Helper_Backup_ForceImportBeforeCppProps></YY_Import_Helper_Backup_ForceImportBeforeCppProps>
+  </PropertyGroup>
+
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(NuGetImportBeforeCppProps)" Condition="'$(NuGetImportBeforeCppProps)' != ''"/>
+  </ImportGroup>
+</Project>

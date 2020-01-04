@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+微软原生的nuget props太靠前，而targets太滞后，我们某些时候希望属性表能插入 PropertySheets ImportGroup。
+
+但是微软NuGet原生并不支持，而新的 PackageReference 想操作 vcxproj 更是困难。不过我想了很多方案，通过很奇葩的方式还是可以实现的。
+
+对于 VS2019 以下平台：
+因为基本上的项目都会有一个 <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+所以我们可以尝试 修改 UserRootDir，让它指向我们的 .user.props，然后在我们的文件里又重新指向系统原始的，这样就差不多算实现了。
+
+
+对于 VS2019 或者更高平台：
+对于这些平台有现成的 ForceImportBeforeCppProps、ForceImportAfterCppProps。处理更简单了，思路一样，但是通用性更好。
+
+
+$(VisualStudioVersion)
+
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <NuGetImportHelperVersion>1.0.0.1</NuGetImportHelperVersion>
+
+    <NuGetForceImportBeforeCppPropsFallback>$(MSBuildThisFileDirectory)Fallback\NuGetImportBeforeCppProps.props</NuGetForceImportBeforeCppPropsFallback>
+    <NuGetForceImportAfterCppPropsFallback>$(MSBuildThisFileDirectory)Fallback\NuGetImportAfterCppProps.props</NuGetForceImportAfterCppPropsFallback>
+    <NuGetForceImportBeforeCppTargetsFallback>$(MSBuildThisFileDirectory)Fallback\NuGetImportBeforeCppTargets.targets</NuGetForceImportBeforeCppTargetsFallback>
+    <NuGetForceImportAfterCppTargetsFallback>$(MSBuildThisFileDirectory)Fallback\NuGetImportAfterCppTargets.targets</NuGetForceImportAfterCppTargetsFallback>
+  </PropertyGroup>
+  
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '' Or '$(VisualStudioVersion)'  &lt; '16.0'">
+      <!--VS2017以及以下平台只能勉强实现 ForceImportAfterCppProps-->
+      <PropertyGroup Condition="Exists('$(MSBuildThisFileDirectory)Thunks\Downlevel\Microsoft.Cpp.$(Platform).user.props')">
+        <YY_Import_Helper_Backup_UserRootDir>$(UserRootDir)</YY_Import_Helper_Backup_UserRootDir>
+        <UserRootDir>$(MSBuildThisFileDirectory)Thunks\Downlevel</UserRootDir>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <!--2019或者更高平台直接使用 ForceImportBeforeCppProps、ForceImportAfterCppProps即可-->
+      <PropertyGroup Condition="Exists('$(MSBuildThisFileDirectory)Thunks\NuGetImportBeforeCppProps.props')">
+        <YY_Import_Helper_Backup_ForceImportBeforeCppProps>$(ForceImportBeforeCppProps)</YY_Import_Helper_Backup_ForceImportBeforeCppProps>
+        <ForceImportBeforeCppProps>$(MSBuildThisFileDirectory)Thunks\NuGetImportBeforeCppProps.props</ForceImportBeforeCppProps>
+      </PropertyGroup>
+      <PropertyGroup Condition="Exists('$(MSBuildThisFileDirectory)Thunks\NuGetImportAfterCppProps.props')">
+        <YY_Import_Helper_Backup_ForceImportAfterCppProps>$(ForceImportAfterCppProps)</YY_Import_Helper_Backup_ForceImportAfterCppProps>
+        <ForceImportAfterCppProps>$(MSBuildThisFileDirectory)Thunks\NuGetImportAfterCppProps.props</ForceImportAfterCppProps>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <!--
+  ForceImportBeforeCppTargets、ForceImportAfterCppTargets已知VS2010就已经支持。
+  -->
+  <PropertyGroup Condition="Exists('$(MSBuildThisFileDirectory)Thunks\NuGetImportBeforeCppTargets.targets')">
+    <YY_Import_Helper_Backup_ForceImportBeforeCppTargets>$(ForceImportBeforeCppTargets)</YY_Import_Helper_Backup_ForceImportBeforeCppTargets>
+    <ForceImportBeforeCppTargets>$(MSBuildThisFileDirectory)Thunks\NuGetImportBeforeCppTargets.targets</ForceImportBeforeCppTargets>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="Exists('$(MSBuildThisFileDirectory)Thunks\NuGetImportAfterCppTargets.targets')">
+    <YY_Import_Helper_Backup_ForceImportAfterCppTargets>$(ForceImportAfterCppTargets)</YY_Import_Helper_Backup_ForceImportAfterCppTargets>
+    <ForceImportAfterCppTargets>$(MSBuildThisFileDirectory)Thunks\NuGetImportAfterCppTargets.targets</ForceImportAfterCppTargets>
+  </PropertyGroup>
+</Project>

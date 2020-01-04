@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <Target Name="EnsureNuGetImportsOK" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <NuGetImportBeforeCppPropsHelpText>NuGetImportBeforeCppProps 存在未执行导入动作，请考虑备选方案在紧挨着 “&lt;Import Project="%24(VCTargetsPath)\Microsoft.Cpp.props" />” 之前插入：“&lt;Import Condition="Exists('%24(NuGetForceImportBeforeCppPropsFallback)')" Project="%24(NuGetForceImportBeforeCppPropsFallback)" />”。</NuGetImportBeforeCppPropsHelpText>
+      <NuGetImportAfterCppPropsHelpText>NuGetImportAfterCppProps 存在未执行导入动作，请考虑备选方案在紧挨着 “&lt;Import Project="%24(VCTargetsPath)\Microsoft.Cpp.props" />” 之后插入：“&lt;Import Condition="Exists('%24(NuGetForceImportAfterCppPropsFallback)')" Project="%24(NuGetForceImportAfterCppPropsFallback)" />”。</NuGetImportAfterCppPropsHelpText>
+    </PropertyGroup>
+    <Error Condition="'$(NuGetImportBeforeCppPropsComplete)' != 'true' and '$(NuGetImportBeforeCppProps)' != ''" Text="$(NuGetImportBeforeCppPropsHelpText)" />
+    <Error Condition="'$(NuGetImportAfterCppPropsComplete)' != 'true' and '$(NuGetImportAfterCppProps)' != ''" Text="$(NuGetImportAfterCppPropsHelpText)" />
+  </Target>
+</Project>

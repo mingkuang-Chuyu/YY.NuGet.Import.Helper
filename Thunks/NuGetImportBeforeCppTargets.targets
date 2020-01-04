@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <NuGetImportBeforeCppTargetsComplete>true</NuGetImportBeforeCppTargetsComplete>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <ForceImportBeforeCppTargets>$(YY_Import_Helper_Backup_ForceImportBeforeCppTargets)</ForceImportBeforeCppTargets>
+    <YY_Import_Helper_Backup_ForceImportBeforeCppTargets></YY_Import_Helper_Backup_ForceImportBeforeCppTargets>
+  </PropertyGroup>
+
+  <!--先导入之前的 ForceImportBeforeCppTargets，这是从兼容性考虑。-->
+  <Import Condition="Exists('$(ForceImportBeforeCppTargets)')" Project="$(ForceImportBeforeCppTargets)" />
+
+  <Import Project="$(NuGetImportBeforeCppTargets)" Condition="'$(NuGetImportBeforeCppTargets)' != ''"/>
+</Project>
