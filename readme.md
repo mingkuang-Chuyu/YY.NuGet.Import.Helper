@@ -96,7 +96,7 @@
 <!--{id}.props-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <NuGetImportBeforeCppProps>$(NuGetImportBeforeCppProps);C:\111.props</NuGetImportBeforeCppProps>
+    <NuGetImportBeforeCppProps Condition="Exists('C:\111.props')">$(NuGetImportBeforeCppProps);C:\111.props</NuGetImportBeforeCppProps>
   </PropertyGroup>
 </Project>
 ```
@@ -108,7 +108,7 @@
 <!--{id}.props-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <NuGetImportAfterCppProps>$(NuGetImportAfterCppProps);C:\222.props</NuGetImportAfterCppProps>
+    <NuGetImportAfterCppProps Condition="Exists('C:\222.props')">$(NuGetImportAfterCppProps);C:\222.props</NuGetImportAfterCppProps>
   </PropertyGroup>
 </Project>
 ```
@@ -120,7 +120,7 @@
 <!--{id}.props-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <NuGetImportBeforeCppTargets>$(NuGetImportBeforeCppTargets);C:\333.props</NuGetImportBeforeCppTargets>
+    <NuGetImportBeforeCppTargets Condition="Exists('C:\333.props')">$(NuGetImportBeforeCppTargets);C:\333.props</NuGetImportBeforeCppTargets>
   </PropertyGroup>
 </Project>
 ```
@@ -132,7 +132,7 @@
 <!--{id}.props-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <NuGetImportAfterCppTargets>$(NuGetImportAfterCppTargets);C:\444.props</NuGetImportAfterCppTargets>
+    <NuGetImportAfterCppTargets Condition="Exists('C:\444.props')">$(NuGetImportAfterCppTargets);C:\444.props</NuGetImportAfterCppTargets>
   </PropertyGroup>
 </Project>
 ```
