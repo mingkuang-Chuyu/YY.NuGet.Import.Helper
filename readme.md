@@ -80,7 +80,7 @@
     <metadata>
         <!--...-->
         <dependencies>
-            <dependency id="YY.NuGet.Import.Helper" version="1.0.0.1" />
+            <dependency id="YY.NuGet.Import.Helper" version="1.0.0.2" />
             <!--...-->
         </dependencies>
     </metadata>
@@ -145,3 +145,6 @@
 * 添加 $(VCTargetsPath)\Microsoft.Cpp.props 之后导入时机
 * 添加 $(VCTargetsPath)\Microsoft.Cpp.targets 之前导入时机
 * 添加 $(VCTargetsPath)\Microsoft.Cpp.targets 之后导入时机
+
+### v1.0.0.2 - 2020-01-14
+* 解决Bug，Fallback 重复导入警告问题。

@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <NuGetImportBeforeCppPropsComplete>true</NuGetImportBeforeCppPropsComplete>
-  </PropertyGroup>
-  
-  <PropertyGroup>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  
+  <PropertyGroup Condition="'$(NuGetImportBeforeCppPropsComplete)' != 'true'">
     <ForceImportBeforeCppProps>$(YY_Import_Helper_Backup_ForceImportBeforeCppProps)</ForceImportBeforeCppProps>
     <YY_Import_Helper_Backup_ForceImportBeforeCppProps></YY_Import_Helper_Backup_ForceImportBeforeCppProps>
   </PropertyGroup>
 
-  <!--先导入之前的 ForceImportBeforeCppProps，这是从兼容性考虑。-->
-  <Import Condition="Exists('$(ForceImportBeforeCppProps)')" Project="$(ForceImportBeforeCppProps)" />
+  <ImportGroup Condition="'$(NuGetImportBeforeCppPropsComplete)' != 'true'">
+    <!--先导入之前的 ForceImportBeforeCppProps，这是从兼容性考虑。-->
+    <Import Condition="Exists('$(ForceImportBeforeCppProps)')" Project="$(ForceImportBeforeCppProps)" />
 
-  <ImportGroup Label="PropertySheets">
     <Import Project="$(NuGetImportBeforeCppProps)" Condition="'$(NuGetImportBeforeCppProps)' != ''"/>
   </ImportGroup>
+
+  <PropertyGroup>
+    <NuGetImportBeforeCppPropsComplete>true</NuGetImportBeforeCppPropsComplete>
+  </PropertyGroup>
 </Project>

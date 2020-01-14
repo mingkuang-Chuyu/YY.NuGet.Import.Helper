@@ -1,15 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <NuGetImportAfterCppPropsComplete>true</NuGetImportAfterCppPropsComplete>
-  </PropertyGroup>
-  
-  <PropertyGroup>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  
+  <PropertyGroup Condition="'$(NuGetImportAfterCppTargetsComplete)' != 'true'">
     <ForceImportAfterCppTargets>$(YY_Import_Helper_Backup_ForceImportAfterCppTargets)</ForceImportAfterCppTargets>
     <YY_Import_Helper_Backup_ForceImportAfterCppTargets></YY_Import_Helper_Backup_ForceImportAfterCppTargets>
   </PropertyGroup>
 
-  <Import Project="$(NuGetImportAfterCppTargets)" Condition="'$(NuGetImportAfterCppTargets)' != ''"/>
+  <ImportGroup Condition="'$(NuGetImportAfterCppTargetsComplete)' != 'true'">
+    <Import Project="$(NuGetImportAfterCppTargets)" Condition="'$(NuGetImportAfterCppTargets)' != ''"/>
+  </ImportGroup>
+  
+  <PropertyGroup>
+    <NuGetImportAfterCppTargetsComplete>true</NuGetImportAfterCppTargetsComplete>
+  </PropertyGroup>
 </Project>

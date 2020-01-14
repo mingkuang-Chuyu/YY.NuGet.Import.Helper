@@ -2,26 +2,26 @@
 
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <NuGetImportAfterCppPropsComplete>true</NuGetImportAfterCppPropsComplete>
-  </PropertyGroup>
-
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '' Or '$(VisualStudioVersion)'  &lt; '16.0'">
-      <PropertyGroup Condition="'$(YY_Import_Helper_Backup_UserRootDir)' != ''">
+      <PropertyGroup Condition="'$(NuGetImportAfterCppPropsComplete)' != 'true'">
         <UserRootDir>$(YY_Import_Helper_Backup_UserRootDir)</UserRootDir>
         <YY_Import_Helper_Backup_UserRootDir></YY_Import_Helper_Backup_UserRootDir>
       </PropertyGroup>
     </When>
     <Otherwise>
-      <PropertyGroup>
+      <PropertyGroup Condition="'$(NuGetImportAfterCppPropsComplete)' != 'true'">
         <ForceImportAfterCppProps>$(YY_Import_Helper_Backup_ForceImportAfterCppProps)</ForceImportAfterCppProps>
         <YY_Import_Helper_Backup_ForceImportAfterCppProps></YY_Import_Helper_Backup_ForceImportAfterCppProps>
       </PropertyGroup>
     </Otherwise>
   </Choose>
-    
-  <ImportGroup Label="PropertySheets">
+
+  <ImportGroup Condition="'$(NuGetImportAfterCppPropsComplete)' != 'true'">
     <Import Project="$(NuGetImportAfterCppProps)" Condition="'$(NuGetImportAfterCppProps)' != ''"/>
   </ImportGroup>
+  
+  <PropertyGroup>
+    <NuGetImportAfterCppPropsComplete>true</NuGetImportAfterCppPropsComplete>
+  </PropertyGroup>
 </Project>
