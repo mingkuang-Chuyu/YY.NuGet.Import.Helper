@@ -139,6 +139,76 @@
 
 > 请严格按上述内容使用，不要破坏 NuGetImportAfterCppTargets 链，以免影响到其他NuGet包。
 
+### 2.5. 为 C++ NuGetPackge 添加 contentFiles 支持。
+
+以 Detours 为例，我们只需在Detours.Static.targets中添加如下内容：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <IncludePath>$(MSBuildThisFileDirectory);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemGroup>
+    <NuGetExConnentFiles Include="$(MSBuildThisFileDirectory)Detours\*.cpp" Exclude="$(MSBuildThisFileDirectory)Detours\uimports.cpp">
+      <!--NuGetPackageId必须这样写，否则罢工！-->
+      <NuGetPackageId>$(MSBuildThisFileName)</NuGetPackageId>
+      <!--配置为ClCompile项，一般来说，C与CPP都应该这样！-->
+      <BuildAction>ClCompile</BuildAction>
+      <!--关闭预编译头，强烈建议关闭，因为库一般不能使用这种玩意。-->
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <!--关闭SDL，自己根据库决定，一般也推荐关闭。-->
+      <SDLCheck>false</SDLCheck>
+      <!--关闭符合模式，具体根据库决定，一般推荐关闭。-->
+      <ConformanceMode>false</ConformanceMode>
+      <!--配置obj输出目录，以免文件重名，强烈建议这样保留。-->
+      <ObjectFileName>$(IntDir)$(MSBuildThisFileName)\</ObjectFileName>
+    </NuGetExConnentFiles>
+  </ItemGroup>
+</Project>
+```
+
+Detours.Static.nuspec 内容如下：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.5">
+    <id>Detours.Static</id>
+    <version>4.0.1.19060</version>
+    <title>Detours Source Package</title>
+    <summary>Detours is a software package for monitoring and instrumenting API calls on Windows.</summary>
+    <authors>Microsoft</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/microsoft/Detours</projectUrl>
+    <description>Detours is a software package for monitoring and instrumenting API calls on Windows. Detours has been used by many ISVs and is also used by product teams at Microsoft. Detours is now available under a standard open source license (MIT). This simplifies licensing for programmers using Detours and allows the community to support Detours using open source tools and processes.
+
+Detours is compatible with the Windows NT family of operating systems: Windows NT, Windows XP, Windows Server 2003, Windows 7, Windows 8, and Windows 10. It cannot be used by Window Store apps because Detours requires APIs not available to those applications. This repo contains the source code for version 4.0.1 of Detours.
+
+For technical documentation on Detours, see the Detours Wiki. For directions on how to build and run samples, see the samples README.txt file.</description>
+    <copyright>Copyright (c) Microsoft Corporation. All rights reserved.</copyright>
+    <tags>Microsoft Detours native nativepackage</tags>
+    <repository type="git" url="https://github.com/microsoft/Detours.git" branch="master" commit="edc8b07ae7e7325d9b9d551b46122a82665161b8" />
+    <contentFiles>
+      <!--故意添加一个 Detours.Static.txt（文件名需要跟包名一致），我们将通过它来检测 contentFiles 特性开启以及关闭-->
+      <files include="any\any\Detours.Static.txt" buildAction="Content" copyToOutput="false"/>
+    </contentFiles>
+    <dependencies>
+      <!--让C++ 包支持 contentFiles 至少需要 1.0.0.3 版本-->
+      <dependency id="YY.NuGet.Import.Helper" version="1.0.0.3" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src=".\src\**" target="build\native\Detours" exclude=".\src\Makefile"/>
+    <file src=".\detours.Static.targets" target="build\native\Detours.Static.targets"/>
+    <file src=".\Detours.Static.txt" target="contentFiles\any\any\Detours.Static"/>
+    <file src=".\Detours.Static.txt" target="Content\any\any\Detours.Static"/>
+  </files>
+</package>
+```
+
+
 ## 3. 更新日志
 ### v1.0.0.1 - 2020-01-02 首次发布
 * 添加 $(VCTargetsPath)\Microsoft.Cpp.props 之前导入时机
@@ -148,3 +218,6 @@
 
 ### v1.0.0.2 - 2020-01-14
 * 解决Bug，Fallback 重复导入警告问题。
+
+### v1.0.0.3 - 2020-09-16
+* 新增Fea，为C++添加 contentFiles 特性支持。

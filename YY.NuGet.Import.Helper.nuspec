@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.5">
+    <id>YY.NuGet.Import.Helper</id>
+    <title>NuGet属性表导入助手</title>
+    <version>$version$</version>
+    <summary>用于增强NuGet属性表导入。</summary>
+    <authors>YY</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/mingkuang-Chuyu/YY.NuGet.Import.Helper</projectUrl>
+    <description>功能 —— 增强NuGet导入
+
+该 Helper 新增了 4 组导入位点，分别是：
+
+$(VCTargetsPath)\Microsoft.Cpp.props 之前
+$(VCTargetsPath)\Microsoft.Cpp.props 之后
+$(VCTargetsPath)\Microsoft.Cpp.targets 之前
+$(VCTargetsPath)\Microsoft.Cpp.targets 之后
+
+全面增强C++ Import，让你的NuGet包创造更多可能！
+
+</description>
+    <releaseNotes>
+      * 新增Fea，为C++添加 contentFiles 特性支持。
+    </releaseNotes>
+    <copyright>Copyright © 2020 YY</copyright>
+    <tags>YY Import Import.Helper native nativepackage</tags>
+    <repository type="git" url="https://github.com/mingkuang-Chuyu/YY.NuGet.Import.Helper.git" branch="master" commit="$commit$" />
+  </metadata>
+  <files>
+    <file src=".\*.props" target="build\native" />
+    <file src=".\*.targets" target="build\native" />
+    <file src=".\Fallback\**" target="build\native\Fallback" />
+    <file src=".\Thunks\**" target="build\native\Thunks" />
+  </files>
+</package>

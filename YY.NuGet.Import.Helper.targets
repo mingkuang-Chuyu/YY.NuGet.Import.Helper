@@ -9,4 +9,42 @@
     <Error Condition="'$(NuGetImportBeforeCppPropsComplete)' != 'true' and '$(NuGetImportBeforeCppProps)' != ''" Text="$(NuGetImportBeforeCppPropsHelpText)" />
     <Error Condition="'$(NuGetImportAfterCppPropsComplete)' != 'true' and '$(NuGetImportAfterCppProps)' != ''" Text="$(NuGetImportAfterCppPropsHelpText)" />
   </Target>
+
+  <!--处理传统NuGet引用的Content-->
+  <Target Name="YY_ResolveNuGetPackagesTextContent" AfterTargets="BeforeClCompile" Outputs="'%(Text.FileName)'" >
+    <PropertyGroup>
+      <ThisNuGetPackageId>%(Text.FileName)</ThisNuGetPackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <NuGetExConnentFiles Update="@(NuGetExConnentFiles)" Condition="'%(NuGetExConnentFiles.NuGetPackageId)' == '$(ThisNuGetPackageId)'">
+        <NuGetIncludeThisFile>true</NuGetIncludeThisFile>
+      </NuGetExConnentFiles>
+    </ItemGroup>
+  </Target>
+
+  <!--处理NuGet PackageReference引用的Content-->
+  <Target Name="YY_ResolveNuGetPackagesPackageReferenceContent" AfterTargets="BeforeClCompile" Outputs="'%(Content.FileName)'">
+    <PropertyGroup>
+      <ThisNuGetPackageId>%(Content.FileName)</ThisNuGetPackageId>
+      <ThisNuGetPackageId Condition="'%(Content.FileName)' != '%(Content.NuGetPackageId)'"></ThisNuGetPackageId>
+      <ThisNuGetPackageVersion>%(Content.NuGetPackageVersion)</ThisNuGetPackageVersion>
+    </PropertyGroup>
+    
+    <ItemGroup Condition="'$(ThisNuGetPackageId)' != ''">
+      <NuGetExConnentFiles Update="@(NuGetExConnentFiles)" Condition="'%(NuGetExConnentFiles.NuGetPackageId)' == '$(ThisNuGetPackageId)'">
+        <NuGetIncludeThisFile>true</NuGetIncludeThisFile>
+        <NuGetPackageVersion Condition="'$(ThisNuGetPackageVersion)' != ''">$(ThisNuGetPackageVersion)</NuGetPackageVersion>
+      </NuGetExConnentFiles>
+    </ItemGroup>
+  </Target>
+
+  <!--处理将项插入内存中-->
+  <Target Name="YY_ResolveNuGetPackages" AfterTargets="BeforeClCompile">    
+    <CreateItem
+        Condition="'%(NuGetExConnentFiles.NuGetIncludeThisFile)' == 'true'"
+        Include="@(NuGetExConnentFiles)">
+      <Output TaskParameter="Include" ItemName="%(NuGetExConnentFiles.BuildAction)"/>
+    </CreateItem>
+  </Target>
 </Project>
