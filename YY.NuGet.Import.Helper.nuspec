@@ -22,7 +22,8 @@ $(VCTargetsPath)\Microsoft.Cpp.targets 之后
 
 </description>
     <releaseNotes>
-      * 新增Fea，为C++添加 contentFiles 特性支持。
+      * 新增Fea，为VS2008平台工具集提供支持。
+      * 新增Fea，为NuGet PC（packages.config）模式提供 ExcludedFromBuild 支持。
     </releaseNotes>
     <copyright>Copyright © 2020 YY</copyright>
     <tags>YY Import Import.Helper native nativepackage</tags>
