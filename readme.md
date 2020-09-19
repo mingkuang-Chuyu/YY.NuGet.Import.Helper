@@ -163,6 +163,12 @@
       <ConformanceMode>false</ConformanceMode>
       <!--配置obj输出目录，以免文件重名，强烈建议这样保留。-->
       <ObjectFileName>$(IntDir)$(MSBuildThisFileName)\</ObjectFileName>
+      <!--关闭视警告为错误-->
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <!--保持默认编译行为 .c 编译为 c，其他cpp-->
+      <CompileAs>Default</CompileAs>
+      <!--禁用CRT安全警告-->
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </NuGetExConnentFiles>
   </ItemGroup>
 </Project>
