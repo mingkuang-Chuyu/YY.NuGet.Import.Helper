@@ -80,7 +80,7 @@
     <metadata>
         <!--...-->
         <dependencies>
-            <dependency id="YY.NuGet.Import.Helper" version="1.0.0.2" />
+            <dependency id="YY.NuGet.Import.Helper" version="1.0.0.4" />
             <!--...-->
         </dependencies>
     </metadata>
@@ -195,29 +195,23 @@ For technical documentation on Detours, see the Detours Wiki. For directions on 
       <files include="any\any\Detours.Static.txt" buildAction="Content" copyToOutput="false"/>
     </contentFiles>
     <dependencies>
-      <!--让C++ 包支持 contentFiles 至少需要 1.0.0.3 版本-->
-      <dependency id="YY.NuGet.Import.Helper" version="1.0.0.3" />
+      <!--让C++ 包支持 contentFiles 建议使用 1.0.0.4 版本-->
+      <dependency id="YY.NuGet.Import.Helper" version="1.0.0.4" />
     </dependencies>
   </metadata>
   <files>
     <file src=".\src\**" target="build\native\Detours" exclude=".\src\Makefile"/>
     <file src=".\detours.Static.targets" target="build\native\Detours.Static.targets"/>
+    <!--Detours.Static.txt文件名跟包名一致即可，0 字节的文件。-->
     <file src=".\Detours.Static.txt" target="contentFiles\any\any\Detours.Static"/>
-    <file src=".\Detours.Static.txt" target="Content\any\any\Detours.Static"/>
+    <file src=".\Detours.Static.txt" target="Content\NuGet\Detours.Static"/>
   </files>
 </package>
 ```
 
+> 添加 contentFiles 特性后，对于PR（PackageReference）模式，可以通过 `<ExcludeAssets>contentFiles</ExcludeAssets>` 来阻止包中的内容编译到项目中。    
+对于 PC（packages.config）模式，则可以把 Detours.Static.txt 设置为从生成中排除。即`<ExcludedFromBuild>true</ExcludedFromBuild>` 来阻止包中的内容编译到项目中。
+
 
 ## 3. 更新日志
-### v1.0.0.1 - 2020-01-02 首次发布
-* 添加 $(VCTargetsPath)\Microsoft.Cpp.props 之前导入时机
-* 添加 $(VCTargetsPath)\Microsoft.Cpp.props 之后导入时机
-* 添加 $(VCTargetsPath)\Microsoft.Cpp.targets 之前导入时机
-* 添加 $(VCTargetsPath)\Microsoft.Cpp.targets 之后导入时机
-
-### v1.0.0.2 - 2020-01-14
-* 解决Bug，Fallback 重复导入警告问题。
-
-### v1.0.0.3 - 2020-09-16
-* 新增Fea，为C++添加 contentFiles 特性支持。
+[更新日志](https://github.com/mingkuang-Chuyu/YY.NuGet.Import.Helper/wiki)

@@ -10,19 +10,6 @@
     <Error Condition="'$(NuGetImportAfterCppPropsComplete)' != 'true' and '$(NuGetImportAfterCppProps)' != ''" Text="$(NuGetImportAfterCppPropsHelpText)" />
   </Target>
 
-  <!--处理传统NuGet引用的Content-->
-  <Target Name="YY_ResolveNuGetPackagesTextContent" AfterTargets="BeforeClCompile" Outputs="'%(Text.FileName)'" >
-    <PropertyGroup>
-      <ThisNuGetPackageId>%(Text.FileName)</ThisNuGetPackageId>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <NuGetExConnentFiles Update="@(NuGetExConnentFiles)" Condition="'%(NuGetExConnentFiles.NuGetPackageId)' == '$(ThisNuGetPackageId)'">
-        <NuGetIncludeThisFile>true</NuGetIncludeThisFile>
-      </NuGetExConnentFiles>
-    </ItemGroup>
-  </Target>
-
   <!--处理NuGet PackageReference引用的Content-->
   <Target Name="YY_ResolveNuGetPackagesPackageReferenceContent" AfterTargets="BeforeClCompile" Outputs="'%(Content.FileName)'">
     <PropertyGroup>
@@ -32,17 +19,45 @@
     </PropertyGroup>
     
     <ItemGroup Condition="'$(ThisNuGetPackageId)' != ''">
-      <NuGetExConnentFiles Update="@(NuGetExConnentFiles)" Condition="'%(NuGetExConnentFiles.NuGetPackageId)' == '$(ThisNuGetPackageId)'">
-        <NuGetIncludeThisFile>true</NuGetIncludeThisFile>
+      <NuGetExConnentFiles Update="@(NuGetExConnentFiles)" Condition="'%(NuGetExConnentFiles.ExcludedFromBuild)' == '' and '%(NuGetExConnentFiles.NuGetPackageId)' == '$(ThisNuGetPackageId)'">
+        <ExcludedFromBuild>false</ExcludedFromBuild>
         <NuGetPackageVersion Condition="'$(ThisNuGetPackageVersion)' != ''">$(ThisNuGetPackageVersion)</NuGetPackageVersion>
       </NuGetExConnentFiles>
     </ItemGroup>
   </Target>
 
+  <!--处理传统NuGet引用的Content-->
+  <!--2008工具集添加Txt后会变成None节点，因此我们再额外处理下None-->
+  <Target Name="YY_ResolveNuGetPackagesNoneContent" AfterTargets="BeforeClCompile" Outputs="'%(None.FileName)'" >
+    <PropertyGroup>
+      <ThisNuGetPackageId>%(None.FileName)</ThisNuGetPackageId>
+      <ThisNuGetPackageExcludedFromBuild>%(None.ExcludedFromBuild)</ThisNuGetPackageExcludedFromBuild>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(ThisNuGetPackageExcludedFromBuild)' != 'true'">
+      <NuGetExConnentFiles Update="@(NuGetExConnentFiles)" Condition="'%(NuGetExConnentFiles.ExcludedFromBuild)' == '' and '%(NuGetExConnentFiles.NuGetPackageId)' == '$(ThisNuGetPackageId)'">
+        <ExcludedFromBuild>false</ExcludedFromBuild>
+      </NuGetExConnentFiles>
+    </ItemGroup>
+  </Target>
+  <!--2012开始 IDE 支持Text了，我们解析下 Text-->
+  <Target Name="YY_ResolveNuGetPackagesTextContent" AfterTargets="BeforeClCompile" Outputs="'%(Text.FileName)'" >
+    <PropertyGroup>
+      <ThisNuGetPackageId>%(Text.FileName)</ThisNuGetPackageId>
+      <ThisNuGetPackageExcludedFromBuild>%(Text.ExcludedFromBuild)</ThisNuGetPackageExcludedFromBuild>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(ThisNuGetPackageExcludedFromBuild)' != 'true'">
+      <NuGetExConnentFiles Update="@(NuGetExConnentFiles)" Condition="'%(NuGetExConnentFiles.ExcludedFromBuild)' == '' and '%(NuGetExConnentFiles.NuGetPackageId)' == '$(ThisNuGetPackageId)'">
+        <ExcludedFromBuild>false</ExcludedFromBuild>
+      </NuGetExConnentFiles>
+    </ItemGroup>
+  </Target>
+
   <!--处理将项插入内存中-->
-  <Target Name="YY_ResolveNuGetPackages" AfterTargets="BeforeClCompile">    
+  <Target Name="YY_ResolveNuGetPackages" AfterTargets="BeforeClCompile">
     <CreateItem
-        Condition="'%(NuGetExConnentFiles.NuGetIncludeThisFile)' == 'true'"
+        Condition="'%(NuGetExConnentFiles.ExcludedFromBuild)' == 'false'"
         Include="@(NuGetExConnentFiles)">
       <Output TaskParameter="Include" ItemName="%(NuGetExConnentFiles.BuildAction)"/>
     </CreateItem>
