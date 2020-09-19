@@ -167,8 +167,6 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <!--保持默认编译行为 .c 编译为 c，其他cpp-->
       <CompileAs>Default</CompileAs>
-      <!--禁用CRT安全警告-->
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </NuGetExConnentFiles>
   </ItemGroup>
 </Project>
