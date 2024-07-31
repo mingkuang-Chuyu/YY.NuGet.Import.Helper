@@ -80,7 +80,7 @@
     <metadata>
         <!--...-->
         <dependencies>
-            <dependency id="YY.NuGet.Import.Helper" version="1.0.0.4" />
+            <dependency id="YY.NuGet.Import.Helper" version="1.0.1" />
             <!--...-->
         </dependencies>
     </metadata>
@@ -140,6 +140,7 @@
 > 请严格按上述内容使用，不要破坏 NuGetImportAfterCppTargets 链，以免影响到其他NuGet包。
 
 ### 2.5. 为 C++ NuGetPackge 添加 contentFiles 支持。
+> 温馨提示：此功能需要MSBuild 16.0（VS2017）或者更高版本！
 
 以 Detours 为例，我们只需在Detours.Static.targets中添加如下内容：
 
@@ -199,8 +200,8 @@ For technical documentation on Detours, see the Detours Wiki. For directions on 
       <files include="any\any\Detours.Static.txt" buildAction="Content" copyToOutput="false"/>
     </contentFiles>
     <dependencies>
-      <!--让C++ 包支持 contentFiles 建议使用 1.0.0.4 版本-->
-      <dependency id="YY.NuGet.Import.Helper" version="1.0.0.4" />
+      <!--让C++ 包支持 contentFiles 建议使用 1.0.1 版本-->
+      <dependency id="YY.NuGet.Import.Helper" version="1.0.1" />
     </dependencies>
   </metadata>
   <files>
@@ -218,4 +219,4 @@ For technical documentation on Detours, see the Detours Wiki. For directions on 
 
 
 ## 3. 更新日志
-[更新日志](https://github.com/mingkuang-Chuyu/YY.NuGet.Import.Helper/wiki)
+[更新日志](https://github.com/mingkuang-Chuyu/YY.NuGet.Import.Helper/releases)
