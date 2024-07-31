@@ -21,10 +21,7 @@ $(VCTargetsPath)\Microsoft.Cpp.targets 之后
 全面增强C++ Import，让你的NuGet包创造更多可能！
 
 </description>
-    <releaseNotes>
-      * 新增Fea，为VS2008平台工具集提供支持。
-      * 新增Fea，为NuGet PC（packages.config）模式提供 ExcludedFromBuild 支持。
-    </releaseNotes>
+    <releaseNotes>$releaseNotes$</releaseNotes>
     <copyright>Copyright © 2020 YY</copyright>
     <tags>YY Import Import.Helper native nativepackage</tags>
     <repository type="git" url="https://github.com/mingkuang-Chuyu/YY.NuGet.Import.Helper.git" branch="master" commit="$commit$" />

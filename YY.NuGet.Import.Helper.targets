@@ -10,8 +10,9 @@
     <Error Condition="'$(NuGetImportAfterCppPropsComplete)' != 'true' and '$(NuGetImportAfterCppProps)' != ''" Text="$(NuGetImportAfterCppPropsHelpText)" />
   </Target>
 
+  <!--只有VS2017或者更高版本自带的MSBuild才支持 Update，所以我们对只在 $(VisualStudioVersion) >= 15.0 上尝试插入NuGet源码包-->
   <!--处理NuGet PackageReference引用的Content-->
-  <Target Name="YY_ResolveNuGetPackagesPackageReferenceContent" AfterTargets="BeforeClCompile" Outputs="'%(Content.FileName)'">
+  <Target Name="YY_ResolveNuGetPackagesPackageReferenceContent" AfterTargets="BeforeClCompile" Outputs="'%(Content.FileName)'" Condition="'$(VisualStudioVersion)' >= '15.0'">
     <PropertyGroup>
       <ThisNuGetPackageId>%(Content.FileName)</ThisNuGetPackageId>
       <ThisNuGetPackageId Condition="'%(Content.FileName)' != '%(Content.NuGetPackageId)'"></ThisNuGetPackageId>
@@ -28,7 +29,7 @@
 
   <!--处理传统NuGet引用的Content-->
   <!--2008工具集添加Txt后会变成None节点，因此我们再额外处理下None-->
-  <Target Name="YY_ResolveNuGetPackagesNoneContent" AfterTargets="BeforeClCompile" Outputs="'%(None.FileName)'" >
+  <Target Name="YY_ResolveNuGetPackagesNoneContent" AfterTargets="BeforeClCompile" Outputs="'%(None.FileName)'" Condition="'$(VisualStudioVersion)' >= '15.0'" >
     <PropertyGroup>
       <ThisNuGetPackageId>%(None.FileName)</ThisNuGetPackageId>
       <ThisNuGetPackageExcludedFromBuild>%(None.ExcludedFromBuild)</ThisNuGetPackageExcludedFromBuild>
@@ -41,7 +42,7 @@
     </ItemGroup>
   </Target>
   <!--2012开始 IDE 支持Text了，我们解析下 Text-->
-  <Target Name="YY_ResolveNuGetPackagesTextContent" AfterTargets="BeforeClCompile" Outputs="'%(Text.FileName)'" >
+  <Target Name="YY_ResolveNuGetPackagesTextContent" AfterTargets="BeforeClCompile" Outputs="'%(Text.FileName)'" Condition="'$(VisualStudioVersion)' >= '15.0'" >
     <PropertyGroup>
       <ThisNuGetPackageId>%(Text.FileName)</ThisNuGetPackageId>
       <ThisNuGetPackageExcludedFromBuild>%(Text.ExcludedFromBuild)</ThisNuGetPackageExcludedFromBuild>

@@ -21,7 +21,7 @@ $(VisualStudioVersion)
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <NuGetImportHelperVersion>1.0.0.4</NuGetImportHelperVersion>
+    <NuGetImportHelperVersion>1.0.1</NuGetImportHelperVersion>
 
     <NuGetForceImportBeforeCppPropsFallback>$(MSBuildThisFileDirectory)Fallback\NuGetImportBeforeCppProps.props</NuGetForceImportBeforeCppPropsFallback>
     <NuGetForceImportAfterCppPropsFallback>$(MSBuildThisFileDirectory)Fallback\NuGetImportAfterCppProps.props</NuGetForceImportAfterCppPropsFallback>
