@@ -57,6 +57,12 @@
 
   <!--处理将项插入内存中-->
   <Target Name="YY_ResolveNuGetPackages" AfterTargets="BeforeClCompile">
+    <!--v141无法识别 LanguageStandard=Default，统一进行修正-->
+    <ItemGroup Condition="'$(PlatformToolsetVersion)' == '' or 141 >= $(PlatformToolsetVersion) ">
+      <NuGetExConnentFiles Update="@(NuGetExConnentFiles)" Condition="'%(NuGetExConnentFiles.BuildAction)' == 'ClCompile'">
+        <LanguageStandard Condition="'%(NuGetExConnentFiles.LanguageStandard)' == 'Default'"></LanguageStandard>
+      </NuGetExConnentFiles>
+    </ItemGroup>
     <CreateItem
         Condition="'%(NuGetExConnentFiles.ExcludedFromBuild)' == 'false'"
         Include="@(NuGetExConnentFiles)">
